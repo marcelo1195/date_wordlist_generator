@@ -2,21 +2,22 @@
 import os
 import sys
 from datetime import datetime
+from src.utils import parse_arguments
+from src.generator import generate_dates
 
 project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(project_root)
-
-from src.utils import parse_arguments, parse_date
-from src.generator import generate_dates
-
 def main():
+  # Parse command-line arguments
   args = parse_arguments()
 
-  start_date = parse_date(args.start) if args.start else datetime(2000, 1, 1)
-  end_date = parse_date(args.end) if args.end else datetime(2030, 12, 31)
-  date_format = args.format
-  output_file = args.output
+  # Extract arguments with default values
+  start_date = args['start_date'] or datetime(2000, 1, 1)
+  end_date = args['end_date'] or datetime(2030, 12, 31)
+  date_format = args['format']
+  output_file = args['output_file']
 
+  # Generate dates
   generated_dates = generate_dates(
       start_date=start_date,
       end_date=end_date,
@@ -25,6 +26,5 @@ def main():
   )
 
   print(f"Generated {len(generated_dates)} dates.")
-
 if __name__ == "__main__":
   main()

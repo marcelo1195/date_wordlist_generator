@@ -15,26 +15,28 @@ def generate_dates(**kwargs):
     # Default kargs values
     start_date = kwargs.get('start_date', datetime(1900, 1, 1))
     end_date = kwargs.get('end_date', datetime(2030, 12, 31))
-    date_format = kwargs.get('format', 'DD/MM/YY')
+    date_format = kwargs.get('format', 'DDMMYY')
     output_file = kwargs.get('output_file', 'date_wordlist.txt')
 
     dates = []
     current_date = start_date
     while current_date <= end_date:
+        print(f"Processing date: {current_date}")
         # Format the date according to the specified format
-        if date_format == 'DD/MM/YY':
-            formatted_date = current_date.strftime('%d/%m/%y')
-        elif date_format == 'MM/DD/YY':
-            formatted_date = current_date.strftime('%m/%d/%y')
-        elif date_format == 'DD/MM/YYYY':
-            formatted_date = current_date.strftime('%d/%m/%Y')
-        elif date_format == 'MM/DD/YYYY':
-            formatted_date = current_date.strftime('%m/%d/%Y')
+        if date_format == 'DDMMYY':
+            formated_date = current_date.strftime('%d%m%y')
+        elif date_format == 'MMDDYY':
+            formated_date = current_date.strftime('%m%d%y')
+        elif date_format == 'DDMMYYYY':
+            formated_date = current_date.strftime('%d%m%Y')
+        elif date_format == 'MMDDYYYY':
+            formated_date = current_date.strftime('%m%d%Y')
         else:
             raise ValueError(f"Invalid date format: {date_format}")
+        dates.append(formated_date)
+        current_date += timedelta(days=1)
 
-    dates.append(formatted_date)
-    current_date += timedelta(days=1)
+    print("Finished generating dates")
 
     # Ensure the output directory exists
     output_dir = os.path.join(os.path.dirname(__file__), '..', 'output')
@@ -43,7 +45,9 @@ def generate_dates(**kwargs):
     # Create the full path for the output file
     output_path = os.path.join(output_dir, output_file)
 
+    print(f"Attempting to write to file: {output_path}")
     weite_to_file(dates, output_path)
+    print(f"File writing completed")
 
     print(f"Wordlist generated successfully. Output file: {output_file}")
 
